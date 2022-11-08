@@ -1,5 +1,7 @@
 package com.oracle.oBootMybatis01.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +25,15 @@ public class EmpController {
 		int totalEmp = es.totalEmp();
 		System.out.println("EmpController totalEmp=>"+totalEmp);
 		
+		// Parameter emp --> Page만 추가 Setting
+		emp.setStart(1);  // 시작시 1
+		emp.setEnd(10);   // 종료시 10
+		
+		List<Emp> listEmp = es.listEmp(emp);
+		System.out.println("EmpController list listEmp.size()->"+listEmp.size());
+		
 		model.addAttribute("totalEmp", totalEmp);
+		model.addAttribute("listEmp", listEmp);
 		
 		return "list";
 	}

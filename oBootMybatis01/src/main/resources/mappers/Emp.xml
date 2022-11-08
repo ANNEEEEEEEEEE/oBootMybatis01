@@ -6,4 +6,15 @@
 	<select id="empTotal" resultType="int">
 		select Count(*) FROM emp
 	</select>
+	
+	<select id="tkEmpListAll" parameterType="Emp" resultType="Emp">
+		SELECT *
+		FROM
+		(
+        	SELECT rownum rn , a.*
+        	FROM 
+                (select * from emp order by empno) a
+		)
+		WHERE rn BETWEEN #{start} and #{end}
+	</select>
 </mapper>

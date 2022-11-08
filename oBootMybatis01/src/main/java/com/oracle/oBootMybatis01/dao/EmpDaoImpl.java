@@ -1,7 +1,11 @@
 package com.oracle.oBootMybatis01.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+
+import com.oracle.oBootMybatis01.model.Emp;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,10 +32,22 @@ public class EmpDaoImpl implements EmpDao {
 
 		} catch (Exception e) {
 			System.out.println("EmpDaoImpl totalEmp Exception->"+e.getMessage());
-		}
-		
-		
+		}		
 		return totEmpCount;
+	}
+
+	@Override
+	public List<Emp> listEmp(Emp emp) {
+		List<Emp> empList = null;
+		System.out.println("EmpDaoImpl listEmp Start...");
+		try {
+			//								Map ID		parameter
+			empList = session.selectList("tkEmpListAll" , emp); // 여러개면 selectList, 하나면 selectOne
+			System.out.println("EmpDaoImpl listEmp empList.size()->"+empList.size());
+		} catch (Exception e) {
+			System.out.println("EmpDaoImpl listEmp e.getMessage()->"+e.getMessage());
+		}		
+		return empList;
 	}
 
 }
