@@ -17,4 +17,25 @@
 		)
 		WHERE rn BETWEEN #{start} and #{end}
 	</select>
+	
+	<select id="tkEmpSelOne" parameterType="int" resultType="Emp">
+		SELECT * FROM emp WHERE empno = #{empno}
+	</select>
+	
+	<update id="tkEmpUpdate" parameterType="Emp">
+		UPDATE emp SET 	ename = #{ename}, 
+						job = #{job}, 
+						mgr = #{mgr}, 
+						sal = #{sal},
+						hiredate = #{hiredate},
+						<if test="#{comm}!=null"> comm = #{comm},</if>
+						deptno = #{deptno}
+		 WHERE empno = #{empno}
+	</update>
+	
+	<select id="tkSelectManager" parameterType="Emp" resultType="Emp">
+		SELECT *
+		FROM emp
+		WHERE empno IN(select mgr from emp)
+	</select>
 </mapper>

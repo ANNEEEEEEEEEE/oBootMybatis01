@@ -49,5 +49,48 @@ public class EmpDaoImpl implements EmpDao {
 		}		
 		return empList;
 	}
+	// 회원상세조회
+	@Override
+	public Emp detailEmp(int empno) {
+		System.out.println("EmpDaoImpl detail start...");
+		Emp emp = new Emp();
+		try {
+			//						 mapperID    ,	Parameter
+			emp = session.selectOne("tkEmpSelOne", empno);
+			System.out.println("EmpDaoImpl detail getEname->"+emp.getEname());
+		} catch (Exception e) {
+			System.out.println("EmpDaoImpl detail Exception->"+e.getMessage());
+		}
+		return emp;
+	}
+	// 회원정보수정
+	@Override
+	public int updateEmp(Emp emp) {
+		System.out.println("EmpDaoImpl update Strat...");
+		int updateCount = 0;
+		try {
+			updateCount = session.update("tkEmpUpdate",emp);
+		} catch (Exception e) {
+			System.out.println("EmpDaoImpl updateEmp Exception->"+e.getMessage());
+		}
+		return updateCount;
+	}
+
+	@Override
+	public List<Emp> listManager() {
+		System.out.println("EmpDaoImpl listManager Start...");
+		// emp 관리자만 Select           Naming Rule 
+		// empList = session.selectList("tkSelectManager");
+		List<Emp> empList = null;
+		System.out.println("EmpDaoImpl listManager Start...");
+		try {
+			//								Map ID		parameter
+			empList = session.selectList("tkEmpListAll"); // 여러개면 selectList, 하나면 selectOne
+			System.out.println("EmpDaoImpl listManager empList.size()->"+empList.size());
+		} catch (Exception e) {
+			System.out.println("EmpDaoImpl listManager e.getMessage()->"+e.getMessage());
+		}		
+		return empList;
+	}
 
 }
