@@ -7,10 +7,20 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<script type="text/javascript">
+	function chk() {
+		if (!frm.empno.value) {
+			alert("사번을 입력한 후에 확인하세요");
+			frm.empno.focus();
+			return false;
+		} else location.href="confirm?empno="+frm.empno.value;
+	}
+
+</script>
 <body>
 	<h2>직원정보 입력</h2>
 	<c:if test="${msg!=null}">${msg}</c:if>
-	<form action="write" method="post" name="frm">
+	<form action="writeEmp" method="post" name="frm">
 		<table>
 			<tr><th>사번</th>
 				<td><input type="number" name="empno" required="required" maxlength="4" value="${empno}">

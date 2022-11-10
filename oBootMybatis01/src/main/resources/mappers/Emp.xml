@@ -4,7 +4,7 @@
 
 <mapper namespace="com.oracle.oBootMybatis01.EmpMapper">
 	<select id="empTotal" resultType="int">
-		select Count(*) FROM emp
+		SELECT Count(*) FROM emp
 	</select>
 	
 	<select id="tkEmpListAll" parameterType="Emp" resultType="Emp">
@@ -33,9 +33,19 @@
 		 WHERE empno = #{empno}
 	</update>
 	
-	<select id="tkSelectManager" parameterType="Emp" resultType="Emp">
-		SELECT *
-		FROM emp
-		WHERE empno IN(select mgr from emp)
+	<select id="tkSelectManager" resultType="Emp">
+		SELECT 	*
+		FROM 	emp
+		WHERE 	empno IN (select mgr from emp)
 	</select>
+	
+	<insert id="insertEmp" parameterType="Emp">
+		INSERT INTO emp VALUES ( #{empno}, #{ename}, #{job}, #{sal}, 
+								#{hiredate}, #{comm}, #{mgr}, #{deptno} )
+	</insert>
+	
+	<delete id="deleteEmp" parameterType="int">
+		DELETE FROM emp WHERE empno = #{empno} 
+	</delete>
+	
 </mapper>

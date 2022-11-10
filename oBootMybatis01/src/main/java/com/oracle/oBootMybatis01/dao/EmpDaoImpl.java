@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.oracle.oBootMybatis01.model.Emp;
+import com.oracle.oBootMybatis01.model.EmpDept;
 
 import lombok.RequiredArgsConstructor;
 
@@ -49,6 +50,7 @@ public class EmpDaoImpl implements EmpDao {
 		}		
 		return empList;
 	}
+	
 	// 회원상세조회
 	@Override
 	public Emp detailEmp(int empno) {
@@ -63,6 +65,7 @@ public class EmpDaoImpl implements EmpDao {
 		}
 		return emp;
 	}
+	
 	// 회원정보수정
 	@Override
 	public int updateEmp(Emp emp) {
@@ -78,19 +81,59 @@ public class EmpDaoImpl implements EmpDao {
 
 	@Override
 	public List<Emp> listManager() {
-		System.out.println("EmpDaoImpl listManager Start...");
-		// emp 관리자만 Select           Naming Rule 
+		// emp 관리자만 Select           		Naming Rule 
 		// empList = session.selectList("tkSelectManager");
 		List<Emp> empList = null;
 		System.out.println("EmpDaoImpl listManager Start...");
 		try {
-			//								Map ID		parameter
-			empList = session.selectList("tkEmpListAll"); // 여러개면 selectList, 하나면 selectOne
-			System.out.println("EmpDaoImpl listManager empList.size()->"+empList.size());
+			//								Map ID
+			empList = session.selectList("tkSelectManager"); // 여러개면 selectList, 하나면 selectOne
 		} catch (Exception e) {
 			System.out.println("EmpDaoImpl listManager e.getMessage()->"+e.getMessage());
 		}		
 		return empList;
+	}
+	
+	// 회원등록
+	@Override
+	public int insertEmp(Emp emp) {
+		int result = 0;
+		System.out.println("EmpDaoImpl insertEmp Start...");
+		try {
+			result = session.insert("insertEmp", emp); 
+		} catch (Exception e) {
+			System.out.println("EmpDaoImpl insertEmp e.getMessage()->"+e.getMessage());
+		}
+		return result;
+	}
+
+	// 회원삭제
+	@Override
+	public int deleteEmp(int empno) {
+		System.out.println("EmpDaoImpl delete Start...");
+		int result = 0;
+		System.out.println("EmpDaoImpl delete empno->"+empno);
+		try {
+			result = session.delete("deleteEmp", empno);
+			System.out.println("EmpDaoImpl delete result->"+result);
+		} catch (Exception e) {
+			System.out.println("EmpDaoImpl delete e.getMessage()->"+e.getMessage());
+		}
+		return result;
+	}
+	
+	// 직원부서조회
+	@Override
+	public List<EmpDept> listEmpDept() {
+		System.out.println("EmpDaoImpl listEmpDept Start...");
+		List<EmpDept> empDept = null;
+		try {
+			empDept = session.selectList("tkListEmpDept");
+		System.out.println("EmpDaoImpl empDept.size()->"+empDept.size());
+		} catch (Exception e) {
+			System.out.println("EmpDaoImpl listEmpDept e.getMessage()->"+e.getMessage());
+		}
+		return empDept;
 	}
 
 }

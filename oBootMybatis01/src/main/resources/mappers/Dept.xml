@@ -4,6 +4,20 @@
 
 <mapper namespace="com.oracle.oBootMybatis01.DeptMapper">
 	<select id="tkSelectDept" resultType="Dept">
-		Select * FROM
+		SELECT * FROM dept
 	</select>
+	
+	<select id="ProcDeptInsert" parameterType="DeptVO" statementType="CALLABLE">
+		{
+			call Dept_Insert3(
+					 #{deptno	,	mode=IN	,	jdbcType=INTEGER}
+					,#{dname	,	mode=IN	,	jdbcType=INTEGER}
+					,#{loc		,	mode=IN	,	jdbcType=INTEGER}
+					,#{odeptno	,	mode=IN	,	jdbcType=INTEGER}
+					,#{odname	,	mode=IN	,	jdbcType=INTEGER}
+					,#{oloc		,	mode=IN	,	jdbcType=INTEGER}		
+			)
+		}
+	</select>
+	
 </mapper>

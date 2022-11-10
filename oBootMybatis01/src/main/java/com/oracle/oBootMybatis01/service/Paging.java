@@ -28,7 +28,7 @@ public class Paging {
 		endPage = startPage + pageBlock - 1; // 10
 		//	   10		 14
 		if (endPage > totalPage) {
-			endPage = totalPage;
+			endPage = totalPage; // 아무것도 없는 페이지가 나오지 않도록
 		}
 	}
 }
