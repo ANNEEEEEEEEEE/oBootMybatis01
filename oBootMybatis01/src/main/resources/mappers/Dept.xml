@@ -3,9 +3,20 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.oracle.oBootMybatis01.DeptMapper">
+	
+	<resultMap type="Dept" id="DeptResult">
+    	<result property="deptno" column="deptno"  />
+    	<result property="dname"  column="dname" />
+    	<result property="loc"    column="loc" />
+    </resultMap>
+	
 	<select id="tkSelectDept" resultType="Dept">
 		SELECT * FROM dept
 	</select>
+	
+	<select id="tkSelectDept3" resultMap="DeptResult">
+	 	select * from dept
+ 	</select>
 	
 	<select id="ProcDeptInsert" parameterType="DeptVO" statementType="CALLABLE">
 		{
@@ -20,4 +31,17 @@
 		}
 	</select>
 	
+	<select id="procDeptList" parameterType="java.util.Map" statementType="CALLABLE">
+	        { 
+	             call Dept_Cursor3(
+	                       #{sDeptno,mode=IN,    jdbcType=INTEGER}
+	                     , #{eDeptno,mode=IN,    jdbcType=INTEGER}
+	                     , #{dept,   mode=OUT,   jdbcType=CURSOR
+	                     ,   javaType=java.sql.ResultSet 
+	                     ,   resultMap=DeptResult}
+	                     )
+	        }
+   
+   </select>
+   
 </mapper>
