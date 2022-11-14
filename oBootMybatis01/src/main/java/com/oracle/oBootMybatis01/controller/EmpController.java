@@ -1,5 +1,6 @@
 package com.oracle.oBootMybatis01.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.activation.DataSource;
@@ -7,19 +8,24 @@ import javax.activation.FileDataSource;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.oracle.oBootMybatis01.model.Dept;
 import com.oracle.oBootMybatis01.model.DeptVO;
 import com.oracle.oBootMybatis01.model.Emp;
 import com.oracle.oBootMybatis01.model.EmpDept;
+import com.oracle.oBootMybatis01.model.Member1;
 import com.oracle.oBootMybatis01.service.EmpService;
 import com.oracle.oBootMybatis01.service.Paging;
 
@@ -138,20 +144,44 @@ public class EmpController {
 		model.addAttribute("deptList", deptList); // dept
  		System.out.println("EmpController writeForm deptList.size()->"+deptList.size());
 		
-		return "writeFormEmp";
+		return "writeFormEmp3";
 	}
 	
+	// Validation시 참조하세요
 	// 직원 등록 (저장은 Post)
-	@PostMapping(value = "writeEmp")
-	public String writeEmp(Emp emp , Model model) {
-		System.out.println("EmpController writeEmp Start...");
+	@PostMapping(value = "writeEmp3")
+	public String writeEmp(@ModelAttribute("emp") @Valid Emp emp 
+            , BindingResult result
+            , Model model) {
+		System.out.println("EmpController writeEmp3 Start...");
+		
+		// Validation 오류시 Result
+		if(result.hasErrors()) {
+			System.out.println("EmpController writeEmp3 hasErrors... ");
+			model.addAttribute("msg","BindingResult 입력 실패 확인해 보세요");
+			return "forward:writeFormEmp";
+		}
+		
 		// Service , DAO , Mapper명[insertEmp] 까지 -> insert
 		// 실패시 --> writeFormEmp
-		int result = es.insertEmp(emp);
-		if (result > 0) return "redirect:listEmp";
+		int insertResult = es.insertEmp(emp);
+		if (insertResult > 0) return "redirect:listEmp";
 		else {
 			model.addAttribute("msg","입력 실패 확인해 보세요" );
 			
+			return "forward:writeFormEmp";
+		}
+	}
+	
+	@PostMapping(value = "writeEmp")
+	public String writeEmp(Emp emp , Model model) {
+		System.out.println("EmpController Start writeEmp..." );
+		
+		// Service, Dao , Mapper명[insertEmp] 까지 -> insert
+		int insertResult = es.insertEmp(emp); 
+		if (insertResult > 0) return "redirect:listEmp";
+		else {
+			model.addAttribute("msg","입력 실패 확인해 보세요");
 			return "forward:writeFormEmp";
 		}
 	}
@@ -171,6 +201,10 @@ public class EmpController {
 			return "forward:writeFormEmp";
 		}
 	}
+	
+	// Controller -->  deleteEmp    1.parameter : empno
+	//     name -> Service, dao , mapper
+	// return -> listEmp
 	
 	// 정보 삭제
 	@GetMapping(value = "deleteEmp")
@@ -255,5 +289,72 @@ public class EmpController {
 				
 		return "writeDept3";
 	}
+	
+	// Map 적용
+	@GetMapping(value = "writeDeptCursor")
+	public String writeDeptCursor(Model model) {
+	    System.out.println("EmpController writeDeptCursor Start...");
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("sDeptno", 30);
+        map.put("eDeptno", 60);
+        es.selListDept(map);
+        List<Dept> deptLists = (List<Dept>) map.get("dept");
+        for(Dept dept : deptLists) {
+        	System.out.println("dept.getDname->"+dept.getDname());
+			System.out.println("dept.getLoc->"+dept.getLoc());
+        }
+		System.out.println("deptList Size->"+ deptLists.size());
+		model.addAttribute("deptList", deptLists);
+		
+		 return "writeDeptCursor";
+	}
+	
+	// interCeptor 시작 화면 
+	@RequestMapping(value = "interCeptorForm")
+	public String interCeptorForm(Model model) {
+		System.out.println("interCeptorForm Start");
+	    return "interCeptorForm";
+	}
+	
+	// 2.interCeptor Number 2
+	@RequestMapping(value="interCeptor")
+	public String interCeptor(String id, Model model) {
+		System.out.println("EmpController  interCeptor  Test Start");
+		System.out.println("EmpController  interCeptor id->"+id);
+		// 존재 : 1  , 비존재 : 0
+		int memCnt = es.memCount(id); 
+		
+		System.out.println("EmpController interCeptor memCnt ->"+ memCnt);
+
+		model.addAttribute("id",id);
+		model.addAttribute("memCnt",memCnt);
+		System.out.println("interCeptor  Test End");
+	
+	
+	
+		return "interCeptor";   // User 존재하면  User 이용 조회 Page
+	}
+	
+	 // SampleInterceptor 내용을 받아 처리 
+	 @RequestMapping(value = "doMemberWrite", method = RequestMethod.GET)
+	 public String doMemberWrite( Model model,  HttpServletRequest request) {
+		 String ID =  (String) request.getSession().getAttribute("ID");
+		 System.out.println("doMemberWrite 부터 하세요");
+		 model.addAttribute("id",ID);
+		 return "doMemberWrite";
+	 }  
+
+	 // interCeptor 진행 Test
+	 @RequestMapping(value="doMemberList")
+	 public String doMemberList(Model model, HttpServletRequest request){
+		String ID =  (String) request.getSession().getAttribute("ID");
+		System.out.println("doMemberList  Test Start  ID ->"+ID);
+		Member1 member1 = null;
+		// Member1 List Get Service
+		List<Member1> listMem = es.listMem(member1);
+		model.addAttribute("ID",ID);
+		model.addAttribute("listMem",listMem);
+		return "doMemberList";   // User 존재하면  User 이용 조회 Page
+	 }	
 
 }
