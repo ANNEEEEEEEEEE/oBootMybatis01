@@ -113,12 +113,14 @@ public class EmpServiceImpl implements EmpService {
 		
 		return empDeptlist;
 	}
+	
 	@Override
 	public void insertDept(DeptVO deptVO) {
 		System.out.println("EmpServiceImpl insertDept Start...");
 		dd.insertDept(deptVO);
 		// void -> return 필요없음
 	}
+	
 	@Override
 	public void selListDept(HashMap<String, Object> map) {
 		System.out.println("EmpServiceImpl selListDept Start...");		
@@ -128,13 +130,20 @@ public class EmpServiceImpl implements EmpService {
 	@Override
 	public int memCount(String id) {
 		System.out.println("EmpServiceImpl memCount id ->"+id);
+		
 		return md.memCount(id); 
 	}
 
 	@Override
 	public List<Member1> listMem(Member1 member1) {
 		System.out.println("EmpServiceImpl listMem Start..");
+		
 		return md.listMem(member1);	
+	}
+	@Override
+	public String deptName(int deptno) {
+		System.out.println("EmpServiceImpl deptName Start..");
+		return ed.deptName(deptno);
 	}
 	
 

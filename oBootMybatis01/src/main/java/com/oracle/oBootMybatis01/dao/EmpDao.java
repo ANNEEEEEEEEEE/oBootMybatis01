@@ -21,4 +21,6 @@ public interface EmpDao {
 	int         deleteEmp(int empno);
 
 	List<EmpDept> listEmpDept();
+
+	String        deptName(int deptno);
 }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oracle.oBootMybatis01.model.Dept;
 import com.oracle.oBootMybatis01.model.DeptVO;
@@ -261,7 +262,6 @@ public class EmpController {
 			System.out.println("mailTransport e.getMessage()->"+e.getMessage());
 			model.addAttribute("check", 2); // 메일 전달 실패
 		}
-		
 		return "mailResult";
 	}
 	
@@ -285,8 +285,7 @@ public class EmpController {
 			System.out.println("deptVO.getOloc()->"+deptVO.getOloc());
 			model.addAttribute("msg" , "정상 입력 되었습니다 ^^");
 			model.addAttribute("dept", deptVO);
-		}
-				
+		}			
 		return "writeDept3";
 	}
 	
@@ -330,8 +329,6 @@ public class EmpController {
 		model.addAttribute("memCnt",memCnt);
 		System.out.println("interCeptor  Test End");
 	
-	
-	
 		return "interCeptor";   // User 존재하면  User 이용 조회 Page
 	}
 	
@@ -355,6 +352,43 @@ public class EmpController {
 		model.addAttribute("ID",ID);
 		model.addAttribute("listMem",listMem);
 		return "doMemberList";   // User 존재하면  User 이용 조회 Page
-	 }	
+	 }
+	 
+	// ajaxForm Test 입력화면
+	@RequestMapping(value = "ajaxForm")
+	public String ajaxForm(Model model) {
+		System.out.println("ajaxForm Start...");
+			
+		return "ajaxForm";
+	}
+	
+	@ResponseBody // RestController가 아닌 그냥 controller에 적었기 때문에 붙여줌
+	@RequestMapping(value = "getDeptName")
+	public String getDeptName(int deptno, Model model) {
+		System.out.println("deptno->"+deptno);
+		String deptName = es.deptName(deptno); // 부서번호를 받아서 부서명을 획득
+		System.out.println("deptName->"+deptName);
+		
+		return deptName;
+	}
+	
+	// Ajax List Test
+	@RequestMapping(value = "listEmpAjaxForm")
+	public String listEmpAjaxForm(Model model) {
+		Emp emp = new Emp();
+		System.out.println("Ajax List Test Strat...");
+		
+		// Parameter emp --> Page만 추가 Setting
+		emp.setStart(1);	// 시작시 1
+		emp.setEnd(10);		// 종료시 10
+		
+		List<Emp> listEmp = es.listEmp(emp);
+		System.out.println("EmpController listEmpAjaxForm listEmp.size()->"+listEmp.size());
+		model.addAttribute("result","kkk");
+		model.addAttribute("listEmp",listEmp);
+		
+		return "listEmpAjaxForm";
+	}
+	
 
 }
