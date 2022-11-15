@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+ <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="header.jsp" %>
 <!DOCTYPE html>
@@ -28,6 +28,27 @@
 				}		
 		);
 	}
+	
+	// RestController 이용
+	// Deptno -> deptName 조건은 객체로 가져옴
+	function getDept(vDeptno) {
+		alert("vDeptno->"+vDeptno);
+		$.ajax(
+				{
+					url:"sample/sendVO2",
+					data:{deptno : vDeptno},
+					dataType:'json', /* data를 그대로 가져오기 위해 */
+					success:function(sampleVo) {
+						resultStr = sampleVo.firstName + " " + sampleVo.lastName + " " + sampleVo.mno;
+						alert("ajax getDept resultStr->" + resultStr);
+						$('#RestDept').val(resultStr);	/* input Tag */
+					}
+					
+				}
+		
+		);
+		
+	}
 
 </script>
 </head>
@@ -49,13 +70,16 @@
 			<td>${emp.deptno} 
 				<input type="button" id="btn_idCheck" value="부서명" onmouseover="getDeptName(${emp.deptno })">
 			</td>
-			<%-- <td>${emp.loc }</td> --%>
+			<td>${emp.loc }</td>
 		</tr>
 	</c:forEach>
 </table>
 
 	deptName:  <input type="text" id="deptName"  readonly="readonly"><p>
     Message :  <span id="msg"></span><p>
+    
+    RestController sendVO2: <input type="text" id="RestDept" readonly="readonly"><p>
+    RestController sendVO2: sendVO2<input type="button" id="btn_Dept" value="부서명" onclick="getDept(10)"><p>
 
 </body>
 </html>

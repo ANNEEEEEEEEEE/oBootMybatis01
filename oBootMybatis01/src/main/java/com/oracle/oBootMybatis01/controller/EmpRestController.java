@@ -28,8 +28,8 @@ public class EmpRestController {
 	
 	// 객체호출
 	// http://jsonviewer.stack.hu  -> JSON을 보기편하게 바꿔주는 사이트
-	@RequestMapping("/sample/sendV02")
-	public SampleVO sendV02(int deptno) {
+	@RequestMapping("/sample/sendVO2")
+	public SampleVO sendVO2(int deptno) {
 		System.out.println("@RestController deptno->" +deptno);
 		SampleVO vo = new SampleVO();
 		vo.setFirstName("길동");
@@ -39,12 +39,14 @@ public class EmpRestController {
 		return vo;
 	}
 	
-	@RequestMapping("/sendV03")
-	public List<Dept> sendV03() {
-		System.out.println("@RestController sendV03 Start...");
+	@RequestMapping("/sendVO3")
+	public List<Dept> sendVO3() {
+		System.out.println("@RestController sendVO3 Start...");
 		List<Dept> deptList = es.deptSelect();
 		
 		return deptList;
 	}
+	
+
 	
 }

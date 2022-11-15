@@ -38,4 +38,6 @@ public interface EmpService {
 
 	String        deptName(int deptno);
 
+	List<Emp>     listSearchEmp(Emp emp);
+
 }

@@ -8,6 +8,7 @@ public class Emp {
 	private String 	job;			private int 	mgr;
 	private String 	hiredate;		private int 	sal;
 	private int 	comm;			private int 	deptno;
+	private String 	loc;
 	
 	// 조회용
 	private String search;			private String keyword;

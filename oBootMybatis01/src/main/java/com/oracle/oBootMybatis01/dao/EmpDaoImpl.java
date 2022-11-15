@@ -149,4 +149,19 @@ public class EmpDaoImpl implements EmpDao {
 		return resultStr;
 	}
 
+	// 조회 (업무,이름)
+	@Override
+	public List<Emp> empSearchList3(Emp emp) {
+		List<Emp> empSearchList3 = null;
+		System.out.println("EmpDaoImpl empSearchList3 Strat...");
+		try {
+			// keyword검색
+			// NamingRule							Map ID		   parameter
+			empSearchList3 = session.selectList("tkEmpSearchList3", emp);
+		} catch (Exception e) {
+			System.out.println("EmpDaoImpl empSearchList3 Exception->"+e.getMessage());
+		}
+		return empSearchList3;
+	}
+
 }

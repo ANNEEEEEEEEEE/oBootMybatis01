@@ -143,7 +143,17 @@ public class EmpServiceImpl implements EmpService {
 	@Override
 	public String deptName(int deptno) {
 		System.out.println("EmpServiceImpl deptName Start..");
+		
 		return ed.deptName(deptno);
+	}
+	@Override
+	public List<Emp> listSearchEmp(Emp emp) {
+		List<Emp> empSearchList = null;
+		System.out.println("EmpServiceImpl listSearchEmp Start...");
+		empSearchList = ed.empSearchList3(emp);
+		System.out.println("EmpServiceImpl listSearchEmp empSearchList.size()->"+empSearchList.size());
+		
+		return empSearchList;
 	}
 	
 

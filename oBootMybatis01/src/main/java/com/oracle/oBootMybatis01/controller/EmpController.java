@@ -64,6 +64,30 @@ public class EmpController {
 		return "list";
 	}
 	
+	// 조회
+	@RequestMapping(value = "listSearch3") // get, post mapping
+	public String listSearch3(Emp emp , String currentPage , Model model) {
+		System.out.println("EmpController Start listSearch3...");
+		// Emp 전체 Count      25
+		int totalEmp = es.totalEmp();
+		System.out.println("EmpController listSearch3 totalEmp=>"+totalEmp);
+		
+		// Paging 작업  -> 모듈화를 시켜놓음으로써 어디서든 paging 처리를 할 수 있음
+		Paging page = new Paging(totalEmp, currentPage);
+		// Parameter emp --> Page만 추가 Setting
+		emp.setStart(page.getStart());  // 시작시 1
+		emp.setEnd(page.getEnd());  	// 종료시 10
+		
+		List<Emp> listSearchEmp = es.listSearchEmp(emp);
+		System.out.println("EmpController list listEmp.size()->"+listSearchEmp.size());
+		
+		model.addAttribute("totalEmp"	, totalEmp);
+		model.addAttribute("listEmp"	, listSearchEmp);
+		model.addAttribute("page"		, page);
+		
+		return "list";
+	}
+	
 	// 정보 상세조회
 	@GetMapping(value = "detailEmp")
 	public String detailEmp(int empno , Model model) {
@@ -390,5 +414,17 @@ public class EmpController {
 		return "listEmpAjaxForm";
 	}
 	
+	@RequestMapping(value = "listEmpAjaxForm2")
+	public String listEmpAjaxForm2(Model model) {
+		System.out.println("listEmpAjaxForm2 Strat...");
+		Emp emp = new Emp();
+		// Parameter emp --> Page만 추가 Setting
+		emp.setStart(1);	// 시작시 1
+		emp.setEnd(10);		// 종료시 10
+		List<Emp> listEmp = es.listEmp(emp);
+		model.addAttribute("listEmp",listEmp);
+		
+		return "listEmpAjaxForm2";
+	}
 
 }
