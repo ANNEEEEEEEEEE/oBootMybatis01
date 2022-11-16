@@ -39,17 +39,29 @@
 		
 		);
 	}
-	
-	function getDeptDelete(vIndex) {		
-		var selEmpno = $("#empno"+vIndex).val();
-		alert("getDeptDelete selEmpno->"+selEmpno);
-		// Server명 --> /empnoDelete(EmpRestController)
-		//				servic : deleteEmp
-		// parameter --> empno : selEmpno, ename : selEname
-		// 성공하면 	 --> 해당 라인 삭제 
-		
+		// Server -> empnoDelete(EmpRestController)
+	   //           service : deleteEmp 
+	   // Parameter -> empno : selEmpno , ename : selEname
+	   // 성공 -> 해당라인 삭제 
+	function getDeptDelete(vIndex) {
+	    //alert("emp vIndex-> " + vIndex);
+	    var selEmpno = $("#empno" + vIndex).val();
+	    var selEname =   $("#ename"+vIndex).val();
+	    alert("getDeptDelete selEmpno-> " + selEmpno);
+	    $.ajax(
+	        {
+	            url      :"/empnoDelete",
+	            data     :{empno : selEmpno , ename : selEname},
+	            dataType :'text',
+	            success  : function(data){
+	                           alert(".ajax getDeptDelete data -> " + data); 
+	                        if (data == '1') {
+	                        // 성공하면 아래라인 수행 
+	                        $('#emp'+vIndex).remove();     /*  Delete Tag */
+	                       }
+	         }
+	    );   
 	}
-
 </script>
 </head>
 <body>
