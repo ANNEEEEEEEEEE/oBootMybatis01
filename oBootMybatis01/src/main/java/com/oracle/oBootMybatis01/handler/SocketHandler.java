@@ -182,7 +182,7 @@ public class SocketHandler extends TextWebSocketHandler {
 		// 대상 : Client
 		jsonObj.put("type", "getId");
 		jsonObj.put("sessionId", session.getId());
-		// Socket Server가 Client에게 전송 
+		// session Server에 등록 되었음을 Socket Server가 Client에게 전송 
 		session.sendMessage(new TextMessage(jsonObj.toJSONString()));
 	}
 
